@@ -69,7 +69,7 @@ def index():
             olderCommands[chatid] = []
             olderCommands.get(chatid).append(random.randrange(100, 1000))
             write_json(olderCommands)
-            send_message(chatid, 'adad entekhab shod hds bzn')
+            send_message(chatid, 'adad entekhab shod hds bzn, adad bein 100 va 1000 ast.')
         elif message.isdigit():
             olderCommands = read_json()
             list_user = olderCommands.get(chatid, [])
