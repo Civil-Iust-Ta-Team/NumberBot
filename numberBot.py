@@ -105,6 +105,7 @@ def read_json(filename='response.json'):
 
 if __name__ == "__main__":
     olderCommands = {}
+    write_json(olderCommands)
     olderCommands = read_json()
     # data = get_all_updates()
     # last = last_update(data)
