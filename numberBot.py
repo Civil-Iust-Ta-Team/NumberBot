@@ -55,7 +55,7 @@ def game(target, n):
 @app.route('/', methods=['POST', 'GET'])
 def index():
     msg = request.get_json()
-    chatid = msg['message']['chat']['id']
+    chatid = str(msg['message']['chat']['id'])
     message = msg['message'].get('text', '')
     if request.method == 'POST':
         if message == '/start':
@@ -92,21 +92,20 @@ def index():
         return '<h1>salam<h1>'
 
 
-def write_json(data, filename='response.json'):
-    with open(filename, 'w') as target:
-        json.dump(data, target, indent=4, ensure_ascii=False)
+def write_json(data, fileName='response.json'):
+    with open(fileName, 'w') as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 
-def read_json(filename='response.json'):
-    with open(filename, 'r') as target:
-        dic = json.load(target)
+def read_json(fileName='response.json'):
+    with open(fileName, 'r') as f:
+        dic = json.load(f)
     return dic
 
 
 if __name__ == "__main__":
     olderCommands = {}
     write_json(olderCommands)
-    olderCommands = read_json()
     # data = get_all_updates()
     # last = last_update(data)
     # chat_id = get_chat_id(last)
