@@ -54,10 +54,10 @@ def game(target, n):
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    msg = request.get_json()
-    chatid = str(msg['message']['chat']['id'])
-    message = msg['message'].get('text', '')
     if request.method == 'POST':
+        msg = request.get_json()
+        chatid = str(msg['message']['chat']['id'])
+        message = msg['message'].get('text', '')
         if message == '/start':
             send_message(chatid, 'salam khsoh amdid')
             send_message(chatid, 'baraie bazi krdn shoro ro bfres')
