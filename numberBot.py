@@ -4,9 +4,11 @@ import random
 from flask import request
 from flask import Flask
 from flask import Response
+import os
 url = "https://api.telegram.org/bot1312813885:AAG-rLhOVFu8R67mN08Bq5JsUSARFQXOiN0/"
 
 app = Flask(__name__)
+
 
 def get_all_updates():
     global url
@@ -37,7 +39,9 @@ def send_photo(chat_id, photo):
     myfile = {'photo': photo}
     response = requests.post(url + 'sendPhoto', data=data, files=myfile)
     return response
-def game(target,n):
+
+
+def game(target, n):
     target = int(target)
     n = int(n)
     if n > target:
@@ -46,54 +50,61 @@ def game(target,n):
         return 'bozorgtr ast'
     else:
         return 'barabar'
-@app.route('/', methods = ['POST' , 'GET'])
+
+
+@app.route('/', methods=['POST', 'GET'])
 def index():
     msg = request.get_json()
     chatid = msg['message']['chat']['id']
-    message = msg['message'].get('text','')
+    message = msg['message'].get('text', '')
     if request.method == 'POST':
         if message == '/start':
-            send_message(chatid,'salam khsoh amdid')
-            send_message(chatid,'baraie bazi krdn shoro ro bfres')
+            send_message(chatid, 'salam khsoh amdid')
+            send_message(chatid, 'baraie bazi krdn shoro ro bfres')
             olderCommands = read_json()
             olderCommands[chatid] = []
             write_json(olderCommands)
-        elif message.find('shoro')!=-1:
+        elif message.find('shoro') != -1:
             olderCommands = read_json()
             olderCommands[chatid] = []
-            olderCommands.get(chatid).append(random.randrange(100,1000))
+            olderCommands.get(chatid).append(random.randrange(100, 1000))
             write_json(olderCommands)
-            send_message(chatid,'adad entekhab shod hds bzn')
+            send_message(chatid, 'adad entekhab shod hds bzn')
         elif message.isdigit():
             olderCommands = read_json()
-            list_user = olderCommands.get(chatid,[])
+            list_user = olderCommands.get(chatid, [])
             if isinstance(list_user, list):
                 print(len(list_user))
             if not isinstance(list_user, list):
-                send_message(chatid,'etelat nadorst ast')
+                send_message(chatid, 'etelat nadorst ast')
             elif len(list_user) == 1:
                 print('ok')
-                result = game(list_user[0],message)
-                if result =='barabar':
-                    send_message(chatid,'hooora dorost hds zdid')
+                result = game(list_user[0], message)
+                if result == 'barabar':
+                    send_message(chatid, 'hooora dorost hds zdid')
                     olderCommands[chatid] = []
                 else:
-                    send_message(chatid,result)
+                    send_message(chatid, result)
 
-        return Response('ok' , status=200)
+        return Response('ok', status=200)
 
     else:
         return '<h1>salam<h1>'
-def write_json(data,filename='response.json'):
-    with open(filename,'w') as target:
-        json.dump(data,target,indent = 4,ensure_ascii = False)
-def read_json(filename = 'response.json'):
-    with open(filename,'r') as target:
-        dic=json.load(target)
+
+
+def write_json(data, filename='response.json'):
+    with open(filename, 'w') as target:
+        json.dump(data, target, indent=4, ensure_ascii=False)
+
+
+def read_json(filename='response.json'):
+    with open(filename, 'r') as target:
+        dic = json.load(target)
     return dic
 
+
 if __name__ == "__main__":
-    olderCommands= {}
+    olderCommands = {}
     olderCommands = read_json()
     # data = get_all_updates()
     # last = last_update(data)
@@ -101,4 +112,4 @@ if __name__ == "__main__":
     # send_message(chat_id, 'salam')
     # send_photo(chat_id, open('120077896.png', 'rb'))
     # print()
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
