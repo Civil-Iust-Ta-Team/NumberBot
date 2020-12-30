@@ -89,7 +89,7 @@ def index():
         return Response('ok', status=200)
 
     else:
-        return '<h1>salam<h1>'
+        return '<h1>salam aleykom<h1>'
 
 
 def write_json(data, fileName='response.json'):
